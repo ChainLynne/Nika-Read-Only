@@ -911,10 +911,9 @@ cd "linux-tkg/RPMs"
 sudo dnf install kernel-6.19.14_tkg_eevdf+-1.x86_64.rpm
 ```
 
-- Edit `/etc/default/grub`, add **mitigations=off/on**:
+- Edit `/etc/default/grub`, add **mitigations=off**:
 ```shell
-<Intel® Core™ processors 6th gen> GRUB_CMDLINE_LINUX="mitigations=off ..."
-<Intel® Core™ processors 11th gen> GRUB_CMDLINE_LINUX="mitigations=on ..."
+GRUB_CMDLINE_LINUX="mitigations=off ..."
 ```
 
 - Update GRUB and restart Linux PC:
