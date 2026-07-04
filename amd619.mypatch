@@ -99,13 +99,12 @@
  		svm->vmcb->control.asid = svm->asid;
  		vmcb_mark_dirty(svm->vmcb, VMCB_ASID);
 --- a/include/linux/kvm_host.h	2026-04-22 12:30:53.000000000 +0100
-+++ b/include/linux/kvm_host.h	2026-06-13 21:07:47.305969018 +0100
-@@ -353,6 +353,11 @@
++++ b/include/linux/kvm_host.h	2026-07-04 11:02:12.849240662 +0100
+@@ -353,6 +353,10 @@
  	unsigned int halt_poll_ns;
  	bool valid_wakeup;
  
 +	u64 last_exit_start;  // NIKA added
-+	u64 total_exit_time;  // NIKA added
 +	bool intercept_cpuid;  // NIKA added
 +	bool infer_intercept;  // NIKA added
 +
