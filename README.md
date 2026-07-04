@@ -777,6 +777,7 @@ lspci -nn
 00:1c.0 PCI bridge [0604]: Intel Corporation Tiger Lake-LP PCI Express Root Port #8 [8086:a0bf] (rev 20)
 00:14.0 USB controller [0c03]: Intel Corporation Tiger Lake-LP USB 3.2 Gen 2x1 xHCI Host Controller [8086:a0ed] (rev 20)
 00:00.0 Host bridge [0600]: Intel Corporation Tiger Lake-UP3/H35 4 cores Host Bridge/DRAM Registers [8086:9a14] (rev 01)
+00:14.2 RAM memory [0500]: Intel Corporation Tiger Lake-LP Shared SRAM [8086:a0ef] (rev 20)
 
 
 lpc_8086="a082"         # Tiger Lake-LP LPC Controller
@@ -788,6 +789,7 @@ sata_8086="f1a8"        # SSD 660P Series
 rootport_8086="a0b8"    # 8-7=1, a0bf-7=a0b8, Tiger Lake-LP PCI Express Root Port #1
 xhci_8086="a0ed"        # Tiger Lake-LP USB 3.2 Gen 2x1 xHCI Host Controller
 hostbridge_8086="9a14"  # 11th Gen Core Processor Host Bridge/DRAM Registers
+pcibridge_8086="a0ef"   # Tiger Lake-LP Shared SRAM
 ```
 
 - Run `qemupatch.sh` to clone, patch, and build QEMU with generated data.
