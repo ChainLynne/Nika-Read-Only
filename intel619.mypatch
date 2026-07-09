@@ -1,5 +1,5 @@
 --- a/arch/x86/kvm/vmx/vmx.c	2026-04-22 12:30:53.000000000 +0100
-+++ b/arch/x86/kvm/vmx/vmx.c	2026-07-09 00:22:29.196690723 +0100
++++ b/arch/x86/kvm/vmx/vmx.c	2026-07-09 16:05:15.643837584 +0100
 @@ -927,7 +927,8 @@
  	u32 eb;
  
@@ -242,7 +242,7 @@
 +		else goto reenter_guest_slow;
 +
 +		__vmcs_writel(GUEST_RIP, __vmcs_readl(GUEST_RIP) + vmcs_read32(VM_EXIT_INSTRUCTION_LEN));  // Manually advance RIP past CPUID
-+		get_debugreg(vcpu->arch.db[6], 6);  // Sync the physical DR6 straight into the cache
++		get_debugreg(vcpu->arch.dr6, 6);  // Sync the physical DR6 straight into the cache
 +
 +#ifndef CONFIG_X86_64
 +		loadsegment(ds, __USER_DS);
