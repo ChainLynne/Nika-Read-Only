@@ -860,12 +860,14 @@ sed -i "$file_core" -Ee "s/QEMU HARDDISK/$new_default_model/"
 
 echo "  $file_ich"
 if [[ "${cpu_vendor:1}" == "AuthenticAMD" ]]; then
-  echo "PCI_VENDOR_ID_INTEL;                              -> 0x1022;"
+  echo "PCI_VENDOR_ID_INTEL;                              -> 0x$device;"
   echo "PCI_DEVICE_ID_INTEL_82801IR;                      -> 0x7901;  // FCH SATA Controller [AHCI mode]"
-  sed -i "$file_ich" -Ee "s/PCI_VENDOR_ID_INTEL;/0x1022;/"
+  sed -i "$file_ich" -Ee "s/PCI_VENDOR_ID_INTEL;/0x$device;/"
   sed -i "$file_ich" -Ee "s/PCI_DEVICE_ID_INTEL_82801IR;/0x$sata_1022;/"
 else
+  echo "PCI_VENDOR_ID_INTEL;                              -> 0x$device;"
   echo "PCI_DEVICE_ID_INTEL_82801IR;                      -> 0x06D2;  // Comet Lake SATA AHCI Controller"
+  sed -i "$file_ich" -Ee "s/PCI_VENDOR_ID_INTEL;/0x$device;/"
   sed -i "$file_ich" -Ee "s/PCI_DEVICE_ID_INTEL_82801IR;/0x$sata_8086;/"
 fi
 
