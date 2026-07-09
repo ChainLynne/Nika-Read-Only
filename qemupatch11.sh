@@ -344,6 +344,7 @@ file_escc="$(pwd)/qemu/hw/char/escc.c"
 #file_serialpci="$(pwd)/qemu/hw/char/serial-pci.c"
 file_edidgenerate="$(pwd)/qemu/hw/display/edid-generate.c"
 file_acpibuild="$(pwd)/qemu/hw/i386/acpi-build.c"
+file_acpi_cpu="$(pwd)/qemu/hw/acpi/cpu.c"
 file_pcihp="$(pwd)/qemu/hw/acpi/pcihp.c"
 file_piix="$(pwd)/qemu/hw/isa/piix.c"
 file_lpcich9="$(pwd)/qemu/hw/isa/lpc_ich9.c"
@@ -420,6 +421,7 @@ if [[ -f "$file_escc" ]]; then rm "$file_escc"; fi
 #if [[ -f "$file_serialpci" ]]; then rm "$file_serialpci"; fi
 if [[ -f "$file_edidgenerate" ]]; then rm "$file_edidgenerate"; fi
 if [[ -f "$file_acpibuild" ]]; then rm "$file_acpibuild"; fi
+if [[ -f "$file_acpi_cpu" ]]; then rm "$file_acpi_cpu"; fi
 if [[ -f "$file_pcihp" ]]; then rm "$file_pcihp"; fi
 if [[ -f "$file_piix" ]]; then rm "$file_piix"; fi
 if [[ -f "$file_lpcich9" ]]; then rm "$file_lpcich9"; fi
@@ -633,6 +635,13 @@ echo "\"VMBUS\"                                           -> \"${new_string}BUS\
 sed -i "$file_acpibuild" -Ee "s/\"VMBS\"/\"${new_string}BS\"/"
 sed -i "$file_acpibuild" -Ee "s/\"VMBus\"/\"${new_string}BUS\"/"
 sed -i "$file_acpibuild" -Ee "s/\"VMBUS\"/\"${new_string}BUS\"/"
+echo "static void build_dbg_aml(Aml *table)"
+echo "{"
+echo "    v v v v"
+echo "    return;"
+sed -i "$file_acpibuild" -Ee "/static void build_dbg_aml\(Aml \*table\)/{ n; a\    return;\n" -Ee " }"
+echo "DRAC                                              -> MEMC"
+sed -i "$file_acpibuild" -Ee "s/DRAC/MEMC/"
 echo "    if (i440fx) {"
 echo "        sb_scope = aml_scope(\"_SB\");"
 echo "    v v v v v v v"
@@ -724,6 +733,28 @@ sed -i "$file_acpibuild" -Ee "/    \} else if \(q35\) \{/a\        sb_scope = am
 sed -i "$file_acpibuild" -e  '/create fw_cfg node/{n;N;N;N;N;d;}'
 sed -i "$file_acpibuild" -e  '/Helpful to speedup Windows guests/{n;n;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;d;}'
 sed -i "$file_acpibuild" -e  '/x86ms->oem_id, x86ms->oem_table_id, &pcms->cxl_devices_state);/{n;n;N;N;d;}'
+get_new_string 4 1
+sed -i "$file_acpibuild" -Ee "s/\"GPE0/\"$new_string/g"
+get_new_string 3 1
+sed -i "$file_acpibuild" -Ee "s/\"SMI/\"$new_string/g"
+sed -i "$file_acpibuild" -Ee "s/resources\"/interface\"/g"
+
+echo "  $file_acpi_cpu"
+get_new_string $(shuf -i 5-7 -n 1) 3
+echo "CPU hotplug                                       -> CPU $prefix$suffix"
+sed -i "$file_acpi_cpu" -Ee "s/CPU Hotplug/CPU $prefix$suffix/gI"
+sed -i "$file_acpi_cpu" -Ee "s/resources\"/interface\"/g"
+
+echo "  $file_pcihp"
+echo "PCI hotplug                                       -> PCI $prefix$suffix"
+sed -i "$file_pcihp" -Ee "s/PCI Hotplug/PCI $prefix$suffix/gI"
+sed -i "$file_pcihp" -Ee "s/resources\"/interface\"/g"
+#sed -i "$file_pcihp" -e  '/static Aml \*aml_pci_device_dsm(void)/,/^}/d'
+#sed -i "$file_pcihp" -e  '/aml_pci_device_dsm());/{d;}'
+sed -i "$file_pcihp" -e  '/add _EJ0 to make slot hotpluggable/{n;N;N;N;N;d;}'
+sed -i "$file_pcihp" -Ee "/        \/\* add _EJ0 to make slot hotpluggable/a\        method = aml_method(\"_RMV\", 0, AML_NOTSERIALIZED);\n\
+        aml_append(method, aml_return(aml_int(0)));\n\
+        aml_append(dev, method);"
 
 echo "  $file_piix"
 echo ".S08.                                             -> .${path}08."
