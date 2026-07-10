@@ -398,7 +398,6 @@ file_devwacom="$(pwd)/qemu/hw/usb/dev-wacom.c"
 file_u2femulated="$(pwd)/qemu/hw/usb/u2f-emulated.c"
 file_u2fpassthru="$(pwd)/qemu/hw/usb/u2f-passthru.c"
 file_u2f="$(pwd)/qemu/hw/usb/u2f.c"
-file_ap="$(pwd)/qemu/hw/vfio/ap.c"
 header_amlbuild="$(pwd)/qemu/include/hw/acpi/aml-build.h"
 header_smbios="$(pwd)/qemu/include/hw/firmware/smbios.h"
 header_pci="$(pwd)/qemu/include/hw/pci/pci.h"
@@ -475,7 +474,6 @@ if [[ -f "$file_devwacom" ]]; then rm "$file_devwacom"; fi
 if [[ -f "$file_u2femulated" ]]; then rm "$file_u2femulated"; fi
 if [[ -f "$file_u2fpassthru" ]]; then rm "$file_u2fpassthru"; fi
 if [[ -f "$file_u2f" ]]; then rm "$file_u2f"; fi
-if [[ -f "$file_ap" ]]; then rm "$file_ap"; fi
 if [[ -f "$header_amlbuild" ]]; then rm "$header_amlbuild"; fi
 if [[ -f "$header_smbios" ]]; then rm "$header_smbios"; fi
 if [[ -f "$header_pci" ]]; then rm "$header_pci"; fi
@@ -1607,10 +1605,6 @@ sed -i "$file_u2f" -Ee "s/\"U2F USB key\"/\"$prefix$suffix U2F USB key\"/"
 sed -i "$file_u2f" -Ee "s/\"0\"/\"$number\"/"
 sed -i "$file_u2f" -Ee "s/_desc   = \"QEMU U2F USB key\"/_desc   = \"$prefix$suffix U2F USB key\"/"
 sed -i "$file_u2f" -Ee "s/desc           = \"QEMU U2F key\"/desc           = \"$prefix$suffix U2F USB key\"/"
-
-echo "  $file_ap"
-echo "hotpluggable = true                               -> hotpluggable = false"
-sed -i "$file_ap" -Ee "s/hotpluggable = true/hotpluggable = false/"
 
 echo "  $header_amlbuild"
 echo "APPNAME6 \"BOCHS \"                                 -> APPNAME6 \"$app_name_6\""
