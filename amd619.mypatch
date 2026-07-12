@@ -1,5 +1,14 @@
 --- a/arch/x86/kvm/svm/svm.c	2026-04-22 12:30:53.000000000 +0100
-+++ b/arch/x86/kvm/svm/svm.c	2026-06-13 21:13:55.781429036 +0100
++++ b/arch/x86/kvm/svm/svm.c	2026-07-11 21:16:14.388739815 +0100
+@@ -218,7 +218,7 @@
+ 			svm_set_gif(svm, true);
+ 			/* #GP intercept is still needed for vmware backdoor */
+ 			if (!enable_vmware_backdoor)
+-				clr_exception_intercept(svm, GP_VECTOR);
++//				clr_exception_intercept(svm, GP_VECTOR);  // NIKA removed
+ 
+ 			/*
+ 			 * Free the nested guest state, unless we are in SMM.
 @@ -1037,7 +1037,8 @@
  	set_dr_intercepts(svm);
  
@@ -10,6 +19,15 @@
  	set_exception_intercept(svm, MC_VECTOR);
  	set_exception_intercept(svm, AC_VECTOR);
  	set_exception_intercept(svm, DB_VECTOR);
+@@ -1047,7 +1048,7 @@
+ 	 * We intercept those #GP and allow access to them anyway
+ 	 * as VMware does.
+ 	 */
+-	if (enable_vmware_backdoor)
++//	if (enable_vmware_backdoor)  // NIKA removed
+ 		set_exception_intercept(svm, GP_VECTOR);
+ 
+ 	svm_set_intercept(svm, INTERCEPT_INTR);
 @@ -1077,6 +1078,8 @@
  	svm_set_intercept(svm, INTERCEPT_XSETBV);
  	svm_set_intercept(svm, INTERCEPT_RDPRU);
@@ -49,7 +67,15 @@
  	vmcb_mark_dirty(svm->vmcb, VMCB_SEG);
  }
  
-@@ -3158,6 +3177,14 @@
+@@ -2201,6 +2220,7 @@
+ 	/* Both #GP cases have zero error_code */
+ 	if (error_code)
+ 		goto reinject;
++	else if (svm_get_cpl(vcpu) == 3) { kvm_queue_exception(vcpu, UD_VECTOR); return 1; }  // NIKA added
+ 
+ 	/* Decode the instruction for usage later */
+ 	if (x86_decode_emulated_instruction(vcpu, 0, NULL, 0) != EMULATION_OK)
+@@ -3158,6 +3178,14 @@
  	return 0;
  }
  
@@ -64,7 +90,7 @@
  static int (*const svm_exit_handlers[])(struct kvm_vcpu *vcpu) = {
  	[SVM_EXIT_READ_CR0]			= cr_interception,
  	[SVM_EXIT_READ_CR3]			= cr_interception,
-@@ -3196,7 +3223,8 @@
+@@ -3196,7 +3224,8 @@
  	[SVM_EXIT_SMI]				= smi_interception,
  	[SVM_EXIT_VINTR]			= interrupt_window_interception,
  	[SVM_EXIT_RDPMC]			= kvm_emulate_rdpmc,
@@ -74,7 +100,7 @@
  	[SVM_EXIT_IRET]                         = iret_interception,
  	[SVM_EXIT_INVD]                         = kvm_emulate_invd,
  	[SVM_EXIT_PAUSE]			= pause_interception,
-@@ -3208,7 +3236,8 @@
+@@ -3208,7 +3237,8 @@
  	[SVM_EXIT_TASK_SWITCH]			= task_switch_interception,
  	[SVM_EXIT_SHUTDOWN]			= shutdown_interception,
  	[SVM_EXIT_VMRUN]			= vmrun_interception,
@@ -84,7 +110,7 @@
  	[SVM_EXIT_VMLOAD]			= vmload_interception,
  	[SVM_EXIT_VMSAVE]			= vmsave_interception,
  	[SVM_EXIT_STGI]				= stgi_interception,
-@@ -4237,6 +4266,13 @@
+@@ -4237,6 +4267,13 @@
  
  	sync_lapic_to_cr8(vcpu);
  

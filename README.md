@@ -200,8 +200,6 @@ sudo virsh net-autostart default
   - [Add Hardware] >> Storage >> Device type: Disk device >> Bus type: SATA >> Create a disk image for the virtual machine: 240 GiB >> Advanced options >> Serial: `generate_your_serial` >> Cache mode: none >> Discard mode: ignore >> [Finish]
   - [Begin Installation] >> Virtual Machine >> Shut Down >> Force Off
 
-- [Add Hardware] >> TPM >> Type: Emulated >> Model: CRB >> Version: 2.0 >> [Finish]
-
 - Virtual Machine Manager >> [Open] >> View >> Details >> Video QXL >> Model: VGA >> [Apply]
 
 - Virtual Machine Manager >> [Open] >> View >> Details >> NIC :xx:xx:xx >> XML
@@ -436,15 +434,15 @@ sudo virsh net-autostart default
 - Nested Virtualization for Intel:
 ```shell
 sudo su
-echo "options kvm_intel nested=1" > /etc/modprobe.d/kvm.conf
-echo "options kvm ignore_msrs=1" >> /etc/modprobe.d/kvm.conf
+echo "options kvm_intel nested=0" > /etc/modprobe.d/kvm.conf
+echo "options kvm ignore_msrs=0" >> /etc/modprobe.d/kvm.conf
 ```
 
 - Nested Virtualization for AMD:
 ```shell
 sudo su
-echo "options kvm_amd nested=1" > /etc/modprobe.d/kvm.conf
-echo "options kvm ignore_msrs=1" >> /etc/modprobe.d/kvm.conf
+echo "options kvm_amd nested=0" > /etc/modprobe.d/kvm.conf
+echo "options kvm ignore_msrs=0" >> /etc/modprobe.d/kvm.conf
 ```
 
 - Preload `vfio-pci` module so it can bind to PCI IDs:
