@@ -57,6 +57,7 @@ else
   echo -e "$(pwd)/\e[1medk2\e[0m found."
 fi
 cd edk2
+sudo dnf builddep edk2.spec -y > /dev/null 2>&1
 if [[ ! -d edk2backup ]]; then
   echo -e "$(pwd)/\e[1medk2backup\e[0m does not exist, prep started..."
   fedpkg prep
