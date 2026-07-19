@@ -1,12 +1,12 @@
 --- a/arch/x86/kvm/vmx/vmx.c	2026-04-22 12:30:53.000000000 +0100
-+++ b/arch/x86/kvm/vmx/vmx.c	2026-07-17 17:32:43.009777046 +0100
++++ b/arch/x86/kvm/vmx/vmx.c	2026-07-18 23:23:15.674572823 +0100
 @@ -927,7 +927,8 @@
  	u32 eb;
  
  	eb = (1u << PF_VECTOR) | (1u << UD_VECTOR) | (1u << MC_VECTOR) |
 -	     (1u << DB_VECTOR) | (1u << AC_VECTOR);
-+	     (1u << AC_VECTOR);  // NIKA include for #DB
-+//	     (1u << DB_VECTOR) | (1u << AC_VECTOR);  // NIKA exclude for #DB
++//	     (1u << AC_VECTOR);  // NIKA include for #DB
++	     (1u << DB_VECTOR) | (1u << AC_VECTOR);  // NIKA exclude for #DB
  	/*
  	 * #VE isn't used for VMX.  To test against unexpected changes
  	 * related to #VE for VMX, intercept unexpected #VE and warn on it.
@@ -184,7 +184,7 @@
  
  	atomic_switch_perf_msrs(vmx);
  	if (intel_pmu_lbr_is_enabled(vcpu))
-@@ -7504,9 +7559,92 @@
+@@ -7504,9 +7559,85 @@
  
  	kvm_wait_lapic_expire(vcpu);
  
@@ -255,13 +255,6 @@
 +		else goto reenter_guest_slow;
 +
 +		__vmcs_writel(GUEST_RIP, __vmcs_readl(GUEST_RIP) + vmcs_read32(VM_EXIT_INSTRUCTION_LEN));  // Manually advance RIP past CPUID
-+		get_debugreg(vcpu->arch.dr6, 6);  // Sync the physical DR6 straight into the cache
-+		u64 fixed = DR6_FIXED_1;
-+		if (!guest_cpu_cap_has(vcpu, X86_FEATURE_RTM))
-+			fixed |= DR6_RTM;
-+		if (!guest_cpu_cap_has(vcpu, X86_FEATURE_BUS_LOCK_DETECT))
-+			fixed |= DR6_BUS_LOCK;
-+		vcpu->arch.dr6 = (vcpu->arch.dr6 & DR6_VOLATILE) | fixed;
 +
 +#ifndef CONFIG_X86_64
 +		loadsegment(ds, __USER_DS);
@@ -277,7 +270,7 @@
  	/* All fields are clean at this point */
  	if (kvm_is_using_evmcs()) {
  		current_evmcs->hv_clean_fields |=
-@@ -7532,7 +7670,7 @@
+@@ -7532,7 +7663,7 @@
  	loadsegment(es, __USER_DS);
  #endif
  
