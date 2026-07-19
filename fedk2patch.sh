@@ -52,6 +52,7 @@ get_new_string() {
 
 if [[ ! -d edk2 ]]; then
   echo -e "$(pwd)/\e[1medk2\e[0m does not exist, clone started..."
+  sudo dnf install fedpkg -y > /dev/null 2>&1
   fedpkg clone -a -b f44 edk2
 else
   echo -e "$(pwd)/\e[1medk2\e[0m found."

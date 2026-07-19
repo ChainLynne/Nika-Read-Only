@@ -137,7 +137,7 @@ for /L %%I in (0,2,22) do (
       if "!SLOT_N_HEX:~%%J,2!"=="0a" (
         set AUX=
         for /L %%K in (0,2,24) do (
-          if "%%K" LEQ "%%I" (
+          if %%K LEQ %%I (
             set AUX=!AUX!!STRING_N_HEX:~%%K,2!
           ) else (
             set AUX=!AUX!!SLOT_N_HEX:~%%K,2!
