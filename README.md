@@ -624,6 +624,10 @@ sudo usermod -aG input $USER
   - System Settings >> Window Management >> Window Rules >> Import... >> GLFW.kwinrule
   - Also check; System Settings >> Display & Monitor >> Scale: 100%
 
+- For **XFCE taskbar settings**:
+  - Top taskbar >> Right-click >> Panel >> Panel Preferences... >> Automatically hide the panel: Always >> [Close]
+  - Top taskbar >> Applications >> Settings >> Settings Manager >> Window Manager Tweaks >> Accessibility >> _check_ [x] Hide title of windows when maximized >> [Close]
+
 - For **MATE taskbar settings**:
   - Top taskbar >> Right-click >> Add to Panel... >> Window List >> [Add] >> [Close]
   - Bottom taskbar >> Delete This Panel
