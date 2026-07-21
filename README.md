@@ -317,6 +317,7 @@ sudo virsh net-autostart default
     <feature policy="require" name="vmx"/>
     <feature policy="disable" name="x2apic"/>
     <feature policy="require" name="topoext"/>
+    <feature policy="require" name="arch-lbr"/>
     <feature policy="disable" name="spec-ctrl"/>
     <feature policy="disable" name="stibp"/>
     <feature policy="disable" name="ssbd"/>
@@ -623,6 +624,10 @@ sudo usermod -aG input $USER
   - System Settings >> Window Management >> Window Rules >> Import... >> GLFW.kwinrule
   - Also check; System Settings >> Display & Monitor >> Scale: 100%
 
+- For **XFCE taskbar settings**:
+  - Top taskbar >> Right-click >> Panel >> Panel Preferences... >> Automatically hide the panel: Always >> [Close]
+  - Top taskbar >> Applications >> Settings >> Settings Manager >> Window Manager Tweaks >> Accessibility >> _check_ [x] Hide title of windows when maximized >> [Close]
+
 - For **MATE taskbar settings**:
   - Top taskbar >> Right-click >> Add to Panel... >> Window List >> [Add] >> [Close]
   - Bottom taskbar >> Delete This Panel
@@ -683,6 +688,7 @@ C:\>
 
     sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install steam
+    sudo ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
   </details>
 
 - Start `Steam` on host with:

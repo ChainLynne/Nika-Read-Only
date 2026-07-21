@@ -330,11 +330,11 @@ get_type_4_data() {
   t4_processor_characteristics="${data:78:2}${data:76:2}"
 }
 
-if [[ ! -d qemu11backup ]]; then
-  echo -e "$(pwd)/\e[1mqemu11backup\e[0m does not exist, cloning..."
-  git clone --single-branch --branch stable-11.0 https://github.com/qemu/qemu.git qemu11backup
+if [[ ! -d qemubackup ]]; then
+  echo -e "$(pwd)/\e[1mqemubackup\e[0m does not exist, cloning..."
+  git clone --single-branch --branch stable-11.0 https://github.com/qemu/qemu.git qemubackup
 else
-  echo -e "$(pwd)/\e[1mqemu11backup\e[0m found."
+  echo -e "$(pwd)/\e[1mqemubackup\e[0m found."
 fi
 
 file_vhdx="$(pwd)/qemu/block/vhdx.c"
@@ -489,7 +489,7 @@ if [[ -f "$file_kvmcpu" ]]; then rm "$file_kvmcpu"; fi
 if [[ -f "$file_ssdt1" ]]; then rm "$file_ssdt1"; fi
 if [[ -f "$file_ssdt2" ]]; then rm "$file_ssdt2"; fi
 mkdir -p qemu
-cp -fr qemu11backup/. qemu
+cp -fr qemubackup/. qemu
 cp -f *.dsl qemu
 #cp -f *.aml qemu
 
